@@ -1,67 +1,43 @@
-# Caelestia Branding
+<div align="center">
 
-> ✅ **Tested and working on Caelestia KDE 2.7.5.**
-> Other versions may work too; if an update changes the code this plugin hooks
-> into, it switches itself off safely (see *How it works*) and a notification
-> tells you.
+<img src="https://raw.githubusercontent.com/caelestia-kde/caelestia/main/assets/caelestia.svg" width="80" alt="Caelestia logo" />
 
-A [Caelestia](https://github.com/caelestia-kde) plugin that shows Caelestia's
-own name and logo wherever you would otherwise see **"Nexus"** or the
+# caelestia-branding
+
+[![Caelestia KDE](https://img.shields.io/badge/Caelestia_KDE-2.7.5_tested-9bd0cc?style=for-the-badge&labelColor=101418)](https://github.com/caelestia-kde/caelestia)
+[![KDE Plasma](https://img.shields.io/badge/Plasma_6-1D99F3?logo=kde&logoColor=white&style=for-the-badge&labelColor=101418)](https://kde.org/plasma-desktop)
+[![Version](https://img.shields.io/badge/Version-1.0.0-9bd0cc?style=for-the-badge&labelColor=101418)](metadata.json)
+[![License: MIT](https://img.shields.io/badge/License-MIT-9bd0cc?style=for-the-badge&labelColor=101418)](LICENSE)
+
+</div>
+
+> [!NOTE]
+> **Tested and working on Caelestia KDE 2.7.5.** Other versions may work too: if an
+> update changes the code this plugin hooks into, it switches itself off safely and a
+> notification tells you.
+
+A plugin for [Caelestia KDE](https://github.com/caelestia-kde/caelestia) that shows
+Caelestia's own name and logo wherever you would otherwise see **"Nexus"** or the
 **noctalia-qs moon icon**.
 
-## What changes
+## Installation
 
-| Where | Before | After |
-| --- | --- | --- |
-| Titlebar, taskbar, Alt+Tab icon of the shell's windows (settings, editors…) | noctalia-qs moon | Caelestia logo, **in your current theme colours** |
-| Their app name in KDE | noctalia-qs | Caelestia |
-| Settings → Appearance → "Nexus settings" (list, page title, search) | Nexus settings | Caelestia settings |
-| The settings window's title before a page is chosen | Nexus | Caelestia |
-| This plugin's icon in the Plugins list | — | the themed Caelestia logo |
+**Requirements:** Caelestia KDE (tested on 2.7.5), `python3`
 
-Nothing is recreated or hard-coded:
-
-- **Logo:** rendered by Caelestia's own `Logo` component (the logo on the
-  bar) in whatever colour theme you use, and re-rendered automatically every
-  time your colours change.
-- **Name:** read from Caelestia's About page ("Caelestia KDE"), shown as
-  "Caelestia". If Caelestia renames itself, this follows.
-- Translations keep working: only the word "Nexus" is swapped inside the
-  already-translated text.
-
-## Install
-
-Settings → Plugins → install from URL, paste:
+Open *Settings*, go to *Plugins*, and install from this URL:
 
 ```
 https://github.com/COCONAT10MEN/caelestia-branding
 ```
 
-Needs `python3`. On first start the plugin hooks into the shell and restarts
-it once. Windows that were already open may keep the old icon until reopened.
+On first start the plugin hooks into the shell and restarts it once. Windows that were
+already open may keep the old icon until you reopen them.
 
-## How it works
+### Updating
 
-- **KDE side.** Caelestia's windows identify as the app
-  `dev.noctalia.noctalia-qs` (the Quickshell build Caelestia runs on), so KDE
-  shows that app's name and icon. The plugin writes a user-level override,
-  `~/.local/share/applications/dev.noctalia.noctalia-qs.desktop`, with
-  Caelestia's name and the rendered logo
-  (`~/.local/share/caelestia/branding/caelestia-logo-*.png`). Nothing
-  system-wide is touched, and it never overwrites an entry someone else made.
-- **Shell side.** Caelestia's plugin API has no hook for this, so on every
-  shell start `patch.py` adds a small `services/CaelestiaBrand.qml` and wraps
-  the few user-visible "Nexus" strings. Every change is wrapped in
-  `// caelestia-branding:begin … :end` markers that store the original text, so
-  a revert restores the files byte for byte. After a Caelestia update it
-  patches again and restarts the shell once (through its `caelestia-shell`
-  systemd service). If an update changed that code, **every** file goes back to
-  stock (never half-patched) and a notification tells you.
-- While the plugin is disabled, the hooks do nothing and the wording is stock.
-- The dock still refuses "End task" on the settings window, so it can't kill
-  the shell.
+Install from the same URL again. Your shell settings are untouched.
 
-## Uninstall
+### Uninstalling
 
 ```bash
 python3 ~/.config/caelestia/plugins/caelestia-branding/patch.py revert ~/.config/quickshell/caelestia
@@ -69,11 +45,76 @@ python3 ~/.config/caelestia/plugins/caelestia-branding/brand-desktop.py revert
 rm -rf ~/.local/share/caelestia/branding
 ```
 
-Then remove the plugin in Settings → Plugins and restart the shell.
+Then remove the plugin in *Settings -> Plugins* and restart the shell.
+
+## What it changes
+
+| Where | Before | After |
+| --- | --- | --- |
+| Titlebar, taskbar and Alt+Tab icon of the shell's windows | noctalia-qs moon | Caelestia logo, in your theme colours |
+| App name of those windows in KDE | noctalia-qs | Caelestia |
+| *Appearance -> Nexus settings* (list, page title, search) | Nexus settings | Caelestia settings |
+| Settings window title before a page is chosen | Nexus | Caelestia |
+| This plugin's icon in the Plugins list | - | the themed Caelestia logo |
+
+Nothing is recreated or hard-coded:
+
+- **Logo** - rendered by Caelestia's own `Logo` component (the logo on the bar) in
+  whatever colour theme you use, and re-rendered every time your colours change
+- **Name** - read from Caelestia's About page ("Caelestia KDE"), shown as "Caelestia"
+- **Translations** - only the word "Nexus" is swapped inside the already-translated text
+
+## Configuring
+
+Nothing to configure: enable the plugin and it follows your theme and Caelestia's name
+on its own. Disabling it in *Settings -> Plugins* brings the stock wording back.
+
+## Troubleshooting
+
+| Problem | Fix |
+| --- | --- |
+| A window still shows the moon icon | Close and reopen it; KDE keeps the icon a window was opened with |
+| Taskbar icon looks outdated after a theme change | Wait a second for the re-render, then reopen the window |
+| "Could not rename Nexus after an update" notification | Caelestia changed the hooked code; everything was put back to stock. Check for a plugin update |
+| Want to see what it is doing | Run `caelestia shell -l` and look for `[caelestia-branding]` lines |
+
+## How it works
+
+- **KDE side** - Caelestia's windows identify as the app `dev.noctalia.noctalia-qs`
+  (the Quickshell build Caelestia runs on), so KDE shows that app's name and icon.
+  The plugin writes a user-level override,
+  `~/.local/share/applications/dev.noctalia.noctalia-qs.desktop`, with Caelestia's name
+  and the rendered logo (`~/.local/share/caelestia/branding/caelestia-logo-*.png`).
+  Nothing system-wide is touched, and an entry someone else made is never overwritten.
+- **Shell side** - Caelestia's plugin API has no hook for this, so on every shell start
+  `patch.py` adds `services/CaelestiaBrand.qml` and wraps the few user-visible "Nexus"
+  strings. Every change sits between `// caelestia-branding:begin` and `:end` markers
+  that store the original text, so a revert restores the files byte for byte.
+- **Updates** - after a Caelestia update it patches again and restarts the shell once,
+  through its `caelestia-shell` systemd service. If an update changed that code, every
+  file goes back to stock (never half-patched).
+- **Safety** - the dock still refuses *End task* on the settings window, so it can't
+  kill the shell.
+
+## Repository layout
+
+```
+main.qml              plugin entry: renders the logo, applies the patch, sets the KDE identity
+brand-desktop.py      writes/reverts the KDE app entry override
+patch.py              idempotent, revertible shell patcher
+shell/                CaelestiaBrand.qml, the singleton patch.py installs into the shell
+restart-shell.sh      restarts the shell through its systemd service
+metadata.json         plugin manifest
+```
+
+## Credits
+
+- [caelestia-kde](https://github.com/caelestia-kde/caelestia) by [ladybug-me](https://github.com/ladybug-me) and [0xSolanaceae](https://github.com/0xSolanaceae) - the shell, its logo and the plugin system this builds on
+- [COCONAT10MEN](https://github.com/COCONAT10MEN) - this plugin
 
 ## License
 
-[MIT](LICENSE): free for anyone to use, modify and redistribute, including in
-other plugins or commercial projects. The only ask: if you use this as a base,
-credit **[COCONAT10MEN](https://github.com/COCONAT10MEN)** (keeping the
-LICENSE file's copyright line does that).
+MIT - see [LICENSE](LICENSE). Free for anyone to use, modify and redistribute, including
+in other plugins or commercial projects. If you use this as a base, please credit
+[COCONAT10MEN](https://github.com/COCONAT10MEN) (keeping the LICENSE file's copyright
+line does that).
