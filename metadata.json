@@ -1,9 +1,9 @@
 {
   "id": "caelestia-branding",
   "name": "Caelestia Branding",
-  "description": "Shows Caelestia's own name and icon wherever you'd otherwise see \"Nexus\" or the noctalia-qs moon icon: settings pages and KDE's titlebar, taskbar and Alt+Tab. Both are read live from Caelestia itself.",
+  "description": "Shows Caelestia's own name and theme-coloured logo on the settings app and in KDE's titlebar, taskbar and Alt+Tab, instead of the stock placeholder name and the noctalia-qs moon icon. Both are read live from Caelestia itself.",
   "icon": "icon.png",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "quickshell",
   "ui": "main.qml",
   "author": {

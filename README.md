@@ -6,7 +6,7 @@
 
 [![Caelestia KDE](https://img.shields.io/badge/Caelestia_KDE-2.7.5_tested-9bd0cc?style=for-the-badge&labelColor=101418)](https://github.com/caelestia-kde/caelestia)
 [![KDE Plasma](https://img.shields.io/badge/Plasma_6-1D99F3?logo=kde&logoColor=white&style=for-the-badge&labelColor=101418)](https://kde.org/plasma-desktop)
-[![Version](https://img.shields.io/badge/Version-1.0.1-9bd0cc?style=for-the-badge&labelColor=101418)](metadata.json)
+[![Version](https://img.shields.io/badge/Version-1.0.2-9bd0cc?style=for-the-badge&labelColor=101418)](metadata.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-9bd0cc?style=for-the-badge&labelColor=101418)](LICENSE)
 
 </div>
@@ -17,8 +17,8 @@
 > notification tells you.
 
 A plugin for [Caelestia KDE](https://github.com/caelestia-kde/caelestia) that shows
-Caelestia's own name and logo wherever you would otherwise see **"Nexus"** or the
-**noctalia-qs moon icon**.
+Caelestia's own name and logo on the settings app and in KDE's titlebar, taskbar and
+Alt+Tab, instead of the stock placeholder name and the **noctalia-qs moon icon**.
 
 ## Installation
 
