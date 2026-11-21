@@ -3,7 +3,7 @@
   "name": "Caelestia Branding",
   "description": "Shows Caelestia's own name and icon wherever you'd otherwise see \"Nexus\" or the noctalia-qs moon icon: settings pages and KDE's titlebar, taskbar and Alt+Tab. Both are read live from Caelestia itself.",
   "icon": "icon.png",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "quickshell",
   "ui": "main.qml",
   "author": {

@@ -28,6 +28,9 @@ Scope {
     readonly property string logoColours: [Colours.palette.m3primary, Colours.palette.m3onSurface, Colours.palette.m3onPrimary, Colours.palette.m3surface].map(c => c.toString()).join("|")
     property string iconFile: ""
     property var grabHost: null
+    // Grab attempts for the current colours; after a few the stock icon is used.
+    property int grabTries: 0
+    readonly property bool renderPending: root.iconFile === "" && root.grabTries < 8
 
     function colourKey(): string {
         let h = 0;
@@ -68,22 +71,66 @@ Scope {
                 }`, host, "caelestiaBrandingLogo");
         }
         const out = root.iconDir + "/caelestia-logo-" + root.colourKey() + ".png";
-        // Let the new colours reach the logo before grabbing it.
+        root.grabTries++;
+        // Let the new colours reach the logo before grabbing it. A grab fails
+        // quietly while the bar's window is still being shown, so a watchdog
+        // tries again until it works.
+        grabWatchdog.restart();
         Qt.callLater(() => {
-            root.grabHost.logo.grabToImage(result => {
+            const started = root.grabHost.logo.grabToImage(result => {
+                grabWatchdog.stop();
                 if (!result.saveToFile(out)) {
                     console.warn("[caelestia-branding] could not save the logo to " + out);
                     return;
                 }
+                root.grabTries = 0;
                 root.iconFile = out;
                 // Old renders and the plugin's own Nexus icon.
                 Quickshell.execDetached(["sh", "-c", 'for f in "$1"/caelestia-logo-*.png; do [ "$f" = "$2" ] || rm -f "$f"; done; cp -f "$2" "$3"', "--", root.iconDir, out, root.pluginDir + "/icon.png"]);
                 root.brandKde();
             }, Qt.size(256, 256));
+            if (!started) {
+                grabWatchdog.stop();
+                root.retryRender();
+            }
         });
     }
 
-    onLogoColoursChanged: renderDebounce.restart()
+    function retryRender(): void {
+        if (root.grabTries < 8) {
+            renderRetry.restart();
+        } else if (!root.iconFile) {
+            console.warn("[caelestia-branding] could not render the logo; using Caelestia's stock icon");
+            root.brandKde();
+        }
+    }
+
+    Timer {
+        id: grabWatchdog
+
+        interval: 3000
+        onTriggered: root.retryRender()
+    }
+
+    /// The last render for these colours, if there is one, works right away.
+    Process {
+        id: lastRender
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const p = text.trim();
+                if (p && !root.iconFile) {
+                    root.iconFile = p;
+                    root.brandKde();
+                }
+            }
+        }
+    }
+
+    onLogoColoursChanged: {
+        root.grabTries = 0;
+        renderDebounce.restart();
+    }
 
     Timer {
         id: renderDebounce
@@ -103,13 +150,20 @@ Scope {
         id: mkdir
 
         command: ["mkdir", "-p", root.iconDir]
-        onExited: root.renderLogo()
+        onExited: {
+            lastRender.command = ["sh", "-c", 'f="$1/caelestia-logo-$2.png"; [ -s "$f" ] && echo "$f"', "--", root.iconDir, root.colourKey()];
+            lastRender.running = true;
+            root.renderLogo();
+        }
     }
 
     // ======================================================= KDE identity
 
     // Titlebar/taskbar/Alt+Tab name and icon for the shell's windows.
     function brandKde(): void {
+        // Wait for the themed logo rather than showing the stock icon first.
+        if (root.renderPending)
+            return;
         if (!root.brandName || desktopProc.running) {
             if (root.brandName)
                 kdeRetry.restart();
