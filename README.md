@@ -24,7 +24,13 @@ Alt+Tab, instead of the stock placeholder name and the **noctalia-qs moon icon**
 
 **Requirements:** Caelestia KDE (tested on 2.7.5), `python3`
 
-Open *Settings*, go to *Plugins*, and install from this URL:
+**Easy install:** download the `…-UNZIP-then-double-click-Install.zip` file from the
+[latest release](https://github.com/COCONAT10MEN/caelestia-branding/releases/latest), unzip it, and
+double-click **Install Caelestia Branding** inside (choose *Execute* / *Run* if KDE asks). It copies the
+plugin into place and restarts Caelestia. Every older version is on the
+[Releases](https://github.com/COCONAT10MEN/caelestia-branding/releases) page with the same kind of zip.
+
+**Or** open *Settings*, go to *Plugins*, and install from this URL:
 
 ```
 https://github.com/COCONAT10MEN/caelestia-branding
