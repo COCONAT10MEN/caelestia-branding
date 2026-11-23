@@ -4,6 +4,7 @@ import Quickshell.Io
 import Caelestia
 import qs.components
 import qs.services
+import "updater"
 
 // Caelestia Branding: everywhere the user sees "Nexus" (and the noctalia-qs
 // app identity KDE shows for the shell's windows), show Caelestia's own name
@@ -243,5 +244,10 @@ Scope {
         stdout: StdioCollector {
             onStreamFinished: root.handle(text)
         }
+    }
+
+    // Opt-in updates: asks before changing anything (see updater/update.sh).
+    Updater {
+        pluginDir: root.pluginDir
     }
 }

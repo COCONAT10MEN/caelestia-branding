@@ -3,7 +3,9 @@
   "name": "Caelestia Branding",
   "description": "Shows Caelestia's own name and theme-coloured logo on the settings app and in KDE's titlebar, taskbar and Alt+Tab, instead of the stock placeholder name and the noctalia-qs moon icon. Both are read live from Caelestia itself.",
   "icon": "icon.png",
-  "version": "1.0.2",
+  "version": "1.1.0",
+  "repository": "https://github.com/COCONAT10MEN/caelestia-branding",
+  "caelestiaTested": "2.7.5",
   "type": "quickshell",
   "ui": "main.qml",
   "author": {

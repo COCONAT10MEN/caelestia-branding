@@ -6,7 +6,7 @@
 
 [![Caelestia KDE](https://img.shields.io/badge/Caelestia_KDE-2.7.5_tested-9bd0cc?style=for-the-badge&labelColor=101418)](https://github.com/caelestia-kde/caelestia)
 [![KDE Plasma](https://img.shields.io/badge/Plasma_6-1D99F3?logo=kde&logoColor=white&style=for-the-badge&labelColor=101418)](https://kde.org/plasma-desktop)
-[![Version](https://img.shields.io/badge/Version-1.0.2-9bd0cc?style=for-the-badge&labelColor=101418)](metadata.json)
+[![Version](https://img.shields.io/badge/Version-1.1.0-9bd0cc?style=for-the-badge&labelColor=101418)](metadata.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-9bd0cc?style=for-the-badge&labelColor=101418)](LICENSE)
 
 </div>
@@ -35,7 +35,37 @@ already open may keep the old icon until you reopen them.
 
 ### Updating
 
-Install from the same URL again. Your shell settings are untouched.
+From version 1.1.0 on, the plugin tells you when a new version is out, and never updates on
+its own:
+
+- About once a day it looks at this repository's
+  [Releases](https://github.com/COCONAT10MEN/caelestia-branding/releases). Only releases are offered, never
+  work-in-progress commits.
+- When there is one, a notification says what changed and which Caelestia version it was
+  tested on, with **Update**, **What's new** and **Skip this version**. Close it and it asks
+  again in three days.
+- If a release needs a newer Caelestia than yours, the notification says so and does not
+  offer it until you update Caelestia.
+- **Update** downloads that release, keeps your current version aside and restarts Caelestia.
+  A notification then offers **Undo update**, which puts the previous version back (that
+  release is then not offered again; newer ones are).
+
+Installed before 1.1.0? Install from the same URL once more to get this. Your shell settings are untouched.
+
+Every version, with what changed and what it was tested on, is on the
+[Releases](https://github.com/COCONAT10MEN/caelestia-branding/releases) page.
+
+Turn update checks off (delete the file to turn them back on):
+
+```bash
+mkdir -p ~/.local/state/caelestia/plugin-updates/caelestia-branding && touch ~/.local/state/caelestia/plugin-updates/caelestia-branding/off
+```
+
+Undo the last update later:
+
+```bash
+bash ~/.config/caelestia/plugins/caelestia-branding/updater/update.sh rollback ~/.config/caelestia/plugins/caelestia-branding ~/.config/quickshell/caelestia
+```
 
 ### Uninstalling
 
@@ -104,6 +134,7 @@ brand-desktop.py      writes/reverts the KDE app entry override
 patch.py              idempotent, revertible shell patcher
 shell/                CaelestiaBrand.qml, the singleton patch.py installs into the shell
 restart-shell.sh      restarts the shell through its systemd service
+updater/              opt-in updates: update.sh (checks, asks, updates, undoes), Updater.qml
 metadata.json         plugin manifest
 ```
 
