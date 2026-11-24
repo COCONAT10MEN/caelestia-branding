@@ -86,8 +86,18 @@ OPS = [
     # it would kill the whole shell), now that its title can say Caelestia.
     (
         "modules/bar/popouts/DockContext.qml",
-        '            return !model.toplevels.some(t => t.title && String(t.title).startsWith("Nexus"));\n',
-        '            return !model.toplevels.some(t => t.title && (String(t.title).startsWith("Nexus") || (CaelestiaBrand.active && String(t.title).startsWith(CaelestiaBrand.name))));\n',
+        [
+            # Caelestia 2.7.6+
+            (
+                '            if (title.startsWith("Nexus") || title.toLowerCase().includes("nexus"))\n',
+                '            if (title.startsWith("Nexus") || title.toLowerCase().includes("nexus") || (CaelestiaBrand.active && title.startsWith(CaelestiaBrand.name)))\n',
+            ),
+            # Caelestia 2.7.5
+            (
+                '            return !model.toplevels.some(t => t.title && String(t.title).startsWith("Nexus"));\n',
+                '            return !model.toplevels.some(t => t.title && (String(t.title).startsWith("Nexus") || (CaelestiaBrand.active && String(t.title).startsWith(CaelestiaBrand.name))));\n',
+            ),
+        ],
     ),
 ]
 
@@ -142,13 +152,21 @@ def plan(shell: str):
 
 def patched(stock: dict) -> dict:
     out = dict(stock)
-    for rel, original, replacement in OPS:
+    for op in OPS:
+        # An op is (file, original, replacement), or (file, [(original, replacement), ...])
+        # when Caelestia versions differ: the first original found exactly once is used.
+        rel = op[0]
+        variants = op[1] if len(op) == 2 else [(op[1], op[2])]
         text = out[rel]
-        count = text.count(original)
-        if count != 1:
+        for original, replacement in variants:
+            if text.count(original) == 1:
+                out[rel] = text.replace(original, block(original, replacement), 1)
+                break
+        else:
+            original = variants[0][0]
+            count = text.count(original)
             first = original.strip().splitlines()[0].strip()
             raise ValueError(f"{rel}: snippet found {count} times: {first[:70]!r} (Caelestia changed; plugin needs updating)")
-        out[rel] = text.replace(original, block(original, replacement), 1)
     return out
 
 
