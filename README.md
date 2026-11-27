@@ -21,6 +21,10 @@ A plugin for [Caelestia KDE](https://github.com/caelestia-kde/caelestia) that sh
 Caelestia's own name and logo on the settings app and in KDE's titlebar, taskbar and
 Alt+Tab, instead of the stock placeholder name and the **noctalia-qs moon icon**.
 
+![Settings before and after: the moon icon and "Nexus" become Caelestia's logo and name](assets/media/branding-before-after.png)
+
+The Settings window before and after. Look at the titlebar icon, the taskbar icon and the page name.
+
 ## Installation
 
 **Requirements:** Caelestia KDE (tested on 2.7.5 and 2.7.6), `python3`
